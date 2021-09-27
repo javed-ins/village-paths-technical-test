@@ -11,6 +11,16 @@ const routes = [
     component: lazy(() => import('features/Users')),
     exact: true,
   },
+  {
+    path: 'joinOrg',
+    component: lazy(() => import('components/joinOrg')),
+    exact: true,
+  },
+  {
+    path: 'newAccount',
+    component: lazy(() => import('components/newAccount')),
+    exact: true,
+  },
 ];
 
 export default routes;
