@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { Image, Row, Col, Typography, Card, Space } from 'antd';
 import {
   CardImage,
@@ -10,14 +10,27 @@ import {
 
 import LeftArrowIcon from '../assets/svg/arrow-left.svg';
 import JoinOrgImg from '../assets/svg/join-org.svg';
-import SmallLogo from '../assets/svg/logo.svg';
 import { useHistory } from 'react-router-dom';
 
 import { PlusOutlined } from '@ant-design/icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { getOrg } from '../redux/joinOrgReducer';
 
 export default function JoinOrg() {
   const history = useHistory();
   const { Title, Text } = Typography;
+  const dispatch = useDispatch();
+  const organizationLoading = useSelector(
+    (state) => state.joinOrgReducer.loading
+  );
+
+  const organizations = useSelector(
+    (state) => state.joinOrgReducer.organizations
+  );
+
+  useEffect(() => {
+    dispatch(getOrg());
+  }, []);
   return (
     <React.Fragment>
       <Row>
@@ -44,17 +57,23 @@ export default function JoinOrg() {
                   </Col>
                 </Space>
                 <Col sm={22} md={16}>
-                  <Card>
+                  <Card loading={organizationLoading}>
                     <Row align="middle">
                       <Col span="4">
-                        <Image preview={false} width={70} src={SmallLogo} />
+                        <Image
+                          preview={false}
+                          width={70}
+                          src={organizations?.profileImage?.url}
+                        />
                       </Col>
                       <Col span="16">
                         <Space direction="vertical">
                           <Title level={5}>
-                            <b>Village Creed PBC</b>
+                            <b>{organizations?.name}</b>
                           </Title>
-                          <Text style={{ color: 'grey' }}>11 members</Text>
+                          <Text style={{ color: 'grey' }}>
+                            {`${organizations?.memberCount} members`}
+                          </Text>
                         </Space>
                       </Col>
                       <Col span="4">
